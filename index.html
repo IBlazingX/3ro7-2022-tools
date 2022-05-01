@@ -188,6 +188,48 @@
                         })
                     </script>
                 </div>
+                <div class="card text-white bg-dark mb-3" style="min-width: 99%; margin: 5px;">
+                    <div class="card-header" style="text-align: center;">
+                        Propiedad Hankeliana (in development)
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            Resuelve una operación con la <span style="color: yellow;">propiedad Hankeliana</span>, ej: <span style="color: green;">x²+5x=0</span><br><br>
+                            Es importante que se cumplan estas condiciones para que el problema sea valido en la <span style="color: yellow;">propiedad Hankeliana</span>:
+                            <li>El resultado de la operación tiene que ser igual a <span style="color: yellow;">0</span></li>
+                            <li>Ambos factores tienen que tener <span style="color: yellow;">parte literal</span></li>
+                            <li>Al menos un factor tiene que estar elavado a la <span style="color: yellow;">2 o más</span></li>
+                        </p>
+                        <hr>
+                        <p class="card-text">
+                            Operación: <span id="ecuaciones-2nd-grado-val1-text" style="color: #0f0;">x²</span><span id="ecuaciones-2nd-grado-val2-text" style="color: #0f0;">+x</span><span id="ecuaciones-2nd-grado-val3-text" style="color: #0f0;">=0</span><br>
+                            Solución: <br>
+                            <span class="text-muted" id="ecuaciones-2nd-grado-text">
+                                x²+x=0 <br>
+                                x.(x+1)=0 <br>
+                                Factores { x=0, x+1=0 -> x=0-1 } <br>
+                                S = { -1, 0 }
+                            </span><br>
+                            Verificación: <br>
+                            <span class="text-muted" id="ecuaciones-2nd-grado-text">
+                                x²+x=0 <br>
+                                0²+0=0 <br>
+                                x²+x=0 <br>
+                                (-1)²+-1=0
+                            </span>
+                        </p>
+                    </div>
+                    <!-- <div class="card-footer">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control px-1" id="ecuaciones-2nd-grado-val1">
+                            <span class="input-group-text px-1">x²</span>
+                            <input type="text" class="form-control px-1" id="ecuaciones-2nd-grado-val2">
+                            <span class="input-group-text px-1">=</span>
+                            <input type="text" class="form-control px-1" id="ecuaciones-2nd-grado-val3">
+                            <button class="btn btn-warning" type="button" id="ecuaciones-2nd-grado" active>Resolver</button>
+                        </div>
+                    </div> -->
+                </div>
             </div>
         </div>
     </div>
