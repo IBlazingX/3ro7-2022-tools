@@ -27,165 +27,138 @@
                         Ecuaciones de 2do grado
                     </div>
                     <div class="card-body">
-                        <p class="card-text">Resuelve una ecuación de segundo grado, ej: <span style="color: green;">2x²+8=12</span></p>
-                        <hr>
                         <p class="card-text">
-                            Ecuación: <span id="ecuaciones-2nd-grado-val1-text" style="color: #0f0;">x²</span><span id="ecuaciones-2nd-grado-val2-text" style="color: #0f0;">+0</span><span id="ecuaciones-2nd-grado-val3-text" style="color: #0f0;">=0</span><br>
-                            Solución: <br>
-                            <span class="text-muted" id="ecuaciones-2nd-grado-text">
-                                x²+0=0 <br>
-                                x²=0-0 <br>
-                                x=±√0 <br>
-                                x=±0
-                            </span>
+                            Resuelve una ecuación de segundo grado, ej: <span style="color: green;">2x²+8=12</span><br>
+                            Para elevar la x al cuadrado escribe <span style="color: green;">x²</span> o <span style="color: green;">x^2</span>
                         </p>
-                    </div>
-                    <div class="card-footer">
+                        <hr>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control px-1" id="ecuaciones-2nd-grado-val1">
-                            <span class="input-group-text px-1">x²</span>
-                            <input type="text" class="form-control px-1" id="ecuaciones-2nd-grado-val2">
-                            <span class="input-group-text px-1">=</span>
-                            <input type="text" class="form-control px-1" id="ecuaciones-2nd-grado-val3">
-                            <button class="btn btn-warning" type="button" id="ecuaciones-2nd-grado" active>Resolver</button>
+                            <input type="text" placeholder="2x²+8=12" class="form-control" id="ecuaciones-2nd-grado-input">
+                        </div>
+                        <div style="display: flex;">
+                            <p class="card-text text-muted" id="ecuaciones-2nd-grado-result">
+                                2x²+8=12<br>
+                                2x²=12-8<br>
+                                x²=4:2<br>
+                                x=±√2<br>
+                                x=±1.4142135623730951
+                            </p>
+                            <p class="card-text text-muted" id="ecuaciones-2nd-grado-confirm" style="margin-left: 50px;">
+                                <span style="color: white; text-decoration: underline;">Verificación</span><br>
+                                2x²+8=12<br>
+                                2.(√2)²+8=12<br>
+                                2x²+8=12<br>
+                                2.(-√2)²+8=12
+                            </p>
                         </div>
                     </div>
         
                     <script>
-                        document.getElementById('ecuaciones-2nd-grado-val1').addEventListener("input", function(){
-                            const span = document.getElementById(`${this.id}-text`)
-                            span.classList.remove(['invalid'])
-        
-                            if (this.value.length > 0) {
-                                /** @type {String} */
-                                let for_check = null
-                                let error = null
-        
-                                // First check
-                                for_check = this.value
-                                for_check = ['-', '+'].includes(for_check.slice(0, 1)) ? for_check.slice(1) : for_check
-        
-                                if (for_check.split('').filter(v => !',0123456789'.split('').includes(v)).length > 0) error = true
-                                if (for_check.split('').filter(v => ','.split('').includes(v)).length > 1) error = true
-                                if (for_check.startsWith(',') || for_check.endsWith(',')) error = true
-                                if (for_check.length <= 0) error = true
-                                if (['-', '+'].includes(this.value)) error = null
-        
-                                if (error) {
-                                    this.style.color = '#f00'
-                                    span.style.color = '#f00'
-                                    span.classList.add(['invalid'])
-                                    error = null
+                        document.getElementById('ecuaciones-2nd-grado-input').addEventListener("input", function(){
+                            /** @type {String} */
+                            let input = this.value
+                            let values = []
+                            let temp = ''
+
+                            for (let char of input.split('')) {
+                                if (values.length == 0) {
+                                    let can = true
+
+                                    if ((temp.endsWith('x^2') || temp.endsWith('x²') ? temp.endsWith('x^2') ? temp.slice(0, -3) : temp.slice(0, -2) : temp).split('').filter(v => !'0123456789+-,'.split('').includes(v)).length > 0) can = false
+                                    if (temp.split('').filter(v => ['+', '-'].includes(v)).length > 0 && !['+', '-'].includes(temp.slice(0, 1))) can = false
+                                    if (temp.split('').filter(v => ['+', '-'].includes(v)).length > 1) can = false
+                                    if (temp.split('').filter(v => v === ',').length > 1) can = false
+                                    if (!temp.endsWith('x^2') && !temp.endsWith('x²')) can = false
+                                    if (temp.endsWith(',') || temp.startsWith(',')) can = false
+                                    if (temp.length < 1) can = false
+                                    
+                                    if (can && ['-', '+'].includes(char)) {
+                                        if (temp.startsWith('+')) temp = temp.slice(1)
+                                        if (temp.includes('x^2')) temp = temp.split('x^2').join('x²')
+
+                                        values.push(temp.split(',').join('.'))
+                                        temp = char
+
+                                    } else temp+= char
+
+                                } else if (values.length == 1) {
+                                    let can = true
+
+                                    if (!['-', '+'].includes(temp.slice(0, 1))) can = false
+                                    if (temp.split('').filter(v => !'0123456789,+-'.split('').includes(v)).length > 0) can = false
+                                    if (temp.split('').filter(v => '0123456789'.split('').includes(v)).length < 1) can = false
+                                    if (temp.split('').filter(v => ['+', '-'].includes(v)).length > 1) can = false
+                                    if (temp.endsWith(',') || temp.slice(1).startsWith(',')) can = false
+                                    if (temp.split('').filter(v => v === ',').length > 1) can = false
+                                    if (temp.length < 2) can = false
+                                    
+                                    if (can && char === '=') {
+                                        values.push(temp.split(',').join('.'))
+                                        temp = char
+
+                                    } else temp+= char
+                                } else if (values.length == 2) {
+                                    let can = true
+                                    temp+= char
+
+                                    if (['=+', '=-'].includes(temp.slice(0, 2)) && temp.slice(2, 3) === ',') can = false
+                                    if (temp.split('').filter(v => ['+', '-'].includes(v)).length > 0 && !['+', '-'].includes(temp.slice(1, 2))) can = false
+                                    if (temp.split('').filter(v => !'0123456789,+-='.split('').includes(v)).length > 0) can = false
+                                    if (temp.split('').filter(v => '0123456789'.split('').includes(v)).length < 1) can = false
+                                    if (temp.split('').filter(v => ['+', '-'].includes(v)).length > 1) can = false
+                                    if (temp.endsWith(',') || temp.slice(1).startsWith(',')) can = false
+                                    if (temp.split('').filter(v => v === ',').length > 1) can = false
+                                    if (temp.split('').filter(v => v === '=').length > 1) can = false
+                                    if (!temp.startsWith('=')) can = false
+                                    if (temp.length < 2) can = false
+                                    
+                                    if (can && values.join('').split('.').join(',') + temp === input.split('x^2').join('x²')) {
+                                        if (temp.startsWith('=+')) temp = '=' + temp.slice(2)
+
+                                        values.push(temp.split(',').join('.'))
+                                        temp = ''
+                                    }
                                 }
-                                else {
-                                    this.style.color = '#0f0'
-                                    span.style.color = '#0f0'
-                                }
-        
-                            } else {
-                                this.style.color = null
-                                span.style.color = '#0f0'
                             }
-        
-                            span.textContent = `${this.value}x²`
-                        })
-                        document.getElementById('ecuaciones-2nd-grado-val2').addEventListener("input", function(){
-                            const span = document.getElementById(`${this.id}-text`)
-                            span.classList.remove(['invalid'])
-        
-                            if (this.value.length > 0) {
-                                /** @type {String} */
-                                let for_check = null
-                                let error = null
-        
-                                // First check
-                                for_check = this.value
-                                for_check = ['-', '+'].includes(for_check.slice(0, 1)) ? for_check.slice(1) : for_check
-        
-                                if (for_check.split('').filter(v => !',0123456789'.split('').includes(v)).length > 0) error = true
-                                if (for_check.split('').filter(v => ','.split('').includes(v)).length > 1) error = true
-                                if (for_check.startsWith(',') || for_check.endsWith(',')) error = true
-                                if (for_check.length <= 0) error = true
-        
-                                if (error) {
-                                    this.style.color = '#f00'
-                                    span.style.color = '#f00'
-                                    span.classList.add(['invalid'])
-                                    error = null
-                                }
-                                else {
-                                    this.style.color = '#0f0'
-                                    span.style.color = '#0f0'
-                                }
-        
-                            } else {
-                                this.style.color = null
-                                span.style.color = '#0f0'
-                            }
-        
-                            span.textContent = `${'0123456789'.split('').includes(this.value.slice(0, 1)) ? '+': ''}${this.value || '+0'}`
-                        })
-                        document.getElementById('ecuaciones-2nd-grado-val3').addEventListener("input", function(){
-                            const span = document.getElementById(`${this.id}-text`)
-                            span.classList.remove(['invalid'])
-        
-                            if (this.value.length > 0) {
-                                /** @type {String} */
-                                let for_check = null
-                                let error = null
-        
-                                // First check
-                                for_check = this.value
-                                for_check = ['-', '+'].includes(for_check.slice(0, 1)) ? for_check.slice(1) : for_check
-        
-                                if (for_check.split('').filter(v => !',0123456789'.split('').includes(v)).length > 0) error = true
-                                if (for_check.split('').filter(v => ','.split('').includes(v)).length > 1) error = true
-                                if (for_check.startsWith(',') || for_check.endsWith(',')) error = true
-                                if (for_check.length <= 0) error = true
-        
-                                if (error) {
-                                    this.style.color = '#f00'
-                                    span.style.color = '#f00'
-                                    span.classList.add(['invalid'])
-                                    error = null
-                                }
-                                else {
-                                    this.style.color = '#0f0'
-                                    span.style.color = '#0f0'
-                                }
-        
-                            } else {
-                                this.style.color = null
-                                span.style.color = '#0f0'
-                            }
-        
-                            span.textContent = `=${this.value || 0}`
-                        })
-        
-                        document.getElementById('ecuaciones-2nd-grado').addEventListener("click", function(){
-                            this.toggleAttribute('disabled')
-                            this.toggleAttribute('disabled')
-        
-                            let values = [
-                                document.getElementById('ecuaciones-2nd-grado-val1-text'),
-                                document.getElementById('ecuaciones-2nd-grado-val2-text'),
-                                document.getElementById('ecuaciones-2nd-grado-val3-text')
-                            ]
-        
-                            if (values.filter(v => !v.classList.contains('invalid')).length == 3) {
-                                let val1 = values[0].textContent
-                                let val2 = values[1].textContent
-                                let val3 = values[2].textContent
-        
-                                document.getElementById('ecuaciones-2nd-grado-text').textContent = ''
-                                document.getElementById('ecuaciones-2nd-grado-text').insertAdjacentHTML('afterbegin', [
-                                    `${val1}${val2}${val3}` + '<br>\n',
-                                    `${val1}${val3}${val2.slice(0, 1) === '+' ? '-' : '+'}${val2.slice(1)}` + '<br>\n',
-                                    ['+x²', '+1x²', '-x²', '-1x²', 'x²', '1x²'].includes(val1) ? `x=±√${Number(val3.slice(1))-Number(val2)}` + '<br>\n' : `x²=${Number(val3.slice(1))-Number(val2)}:${Number(val1.slice(0, -2) || 1)}` + '<br>\n' + `x=±√${(Number(val3.slice(1))-Number(val2))/Number(val1.slice(0, -2) || 1)}` + '<br>\n',
-                                    (Number(val3.slice(1))-Number(val2))/Number(val1.slice(0, -2)) < 0 ? 'x=Ø' : `x=±${Math.sqrt((Number(val3.slice(1))-Number(val2))/Number(val1.slice(0, -2) || 1))}` + '<br>\n',
-                                ].join('')) // ² ± √ Ø ≅
+
+                            let val1 = values[0] || '', val2 = values[1] || '', val3 = values[2] || ''
+
+                            document.getElementById('ecuaciones-2nd-grado-result').textContent = ''
+                            document.getElementById('ecuaciones-2nd-grado-result').insertAdjacentHTML('afterbegin', `<span style="color: green;">${values.join('')}</span><span style="color: red;">${temp || ''}</span> ${values.length == 3 ? `<br>
+                                ${val1}${val3}${val2.slice(0, 1) === '+' ? '-' : '+'}${val2.slice(1)}<br>
+                                ${['+x²', '+1x²', '-x²', '-1x²', 'x²', '1x²'].includes(val1) ? `x=±√${Number(val3.slice(1))-Number(val2)}` + '<br>\n' : `x²=${Number(val3.slice(1))-Number(val2)}:${Number(val1.slice(0, -2) || 1)}` + '<br>\n' + `x=±√${(Number(val3.slice(1))-Number(val2))/Number(val1.slice(0, -2) || 1)}`}<br>
+                                ${(Number(val3.slice(1))-Number(val2))/Number(val1.slice(0, -2)) < 0 ? 'x=Ø' : `x=±${Math.sqrt((Number(val3.slice(1))-Number(val2))/Number(val1.slice(0, -2) || 1))}`}
+                            `: ''}`.split('.').join(','))
+                        
+                            document.getElementById('ecuaciones-2nd-grado-confirm').textContent = ''
+                            document.getElementById('ecuaciones-2nd-grado-confirm').insertAdjacentHTML('afterbegin', `<span style="color: white; text-decoration: underline;">Verificación</span>${values.length == 3 && (Number(val3.slice(1))-Number(val2))/Number(val1.slice(0, -2)) >= 0 ? `<br>
+                                ${val1}${val2}${val3}<br>
+                                ${val1.slice(0, -2)}#${Number.isInteger(Math.sqrt((Number(val3.slice(1))-Number(val2))/Number(val1.slice(0, -2) || 1))) ? Math.sqrt((Number(val3.slice(1))-Number(val2))/Number(val1.slice(0, -2) || 1)) : `(√${(Number(val3.slice(1))-Number(val2))/Number(val1.slice(0, -2) || 1)})`}²${val2}${val3}<br>
+                                ${val1}${val2}${val3}<br>
+                                ${val1.slice(0, -2)}#(-${Number.isInteger(Math.sqrt((Number(val3.slice(1))-Number(val2))/Number(val1.slice(0, -2) || 1))) ? Math.sqrt((Number(val3.slice(1))-Number(val2))/Number(val1.slice(0, -2) || 1)) : `√${(Number(val3.slice(1))-Number(val2))/Number(val1.slice(0, -2) || 1)}`})²${val2}${val3}
+                            `: ''}`.split('.').join(',').split('#').join('.'))
+
+                            if (input.length < 1) {
+                                document.getElementById('ecuaciones-2nd-grado-result').textContent = ''
+                                document.getElementById('ecuaciones-2nd-grado-result').insertAdjacentHTML('afterbegin', `
+                                    2x²+8=12<br>
+                                    2x²=12-8<br>
+                                    x²=4:2<br>
+                                    x=±√2<br>
+                                    x=±1.4142135623730951
+                                `)
+
+                                document.getElementById('ecuaciones-2nd-grado-confirm').textContent = ''
+                                document.getElementById('ecuaciones-2nd-grado-confirm').insertAdjacentHTML('afterbegin', `
+                                    <span style="color: white; text-decoration: underline;">Verificación</span><br>
+                                    2x²+8=12<br>
+                                    2.(√2)²+8=12<br>
+                                    2x²+8=12<br>
+                                    2.(-√2)²+8=12
+                                `)
                             }
                         })
+
                     </script>
                 </div>
                 <div class="card text-white bg-dark mb-3" style="min-width: 99%; margin: 5px;">
