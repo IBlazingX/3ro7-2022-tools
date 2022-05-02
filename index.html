@@ -124,8 +124,8 @@
                             document.getElementById('ecuaciones-2nd-grado-result').textContent = ''
                             document.getElementById('ecuaciones-2nd-grado-result').insertAdjacentHTML('afterbegin', `<span style="color: green;">${values.join('')}</span><span style="color: red;">${temp || ''}</span> ${values.length == 3 ? `<br>
                                 ${val1}${val3}${val2.slice(0, 1) === '+' ? '-' : '+'}${val2.slice(1)}<br>
-                                ${['+x²', '+1x²', '-x²', '-1x²', 'x²', '1x²'].includes(val1) ? `x=±√${Number(val3.slice(1))-Number(val2)}` + '<br>\n' : `x²=${Number(val3.slice(1))-Number(val2)}:${Number(val1.slice(0, -2) || 1)}` + '<br>\n' + `x=±√${(Number(val3.slice(1))-Number(val2))/Number(val1.slice(0, -2) || 1)}`}<br>
-                                ${(Number(val3.slice(1))-Number(val2))/Number(val1.slice(0, -2)) < 0 ? 'x=Ø' : `x=±${Math.sqrt((Number(val3.slice(1))-Number(val2))/Number(val1.slice(0, -2) || 1))}`}
+                                ${['x²', '1x²', '-x²', '-1x²'].includes(val1) ? `x=±√${(Number(val3.slice(1))-Number(val2))/Number(['-', '-1'].includes(val1.slice(0, -2)) ? -1 : val1.slice(0, -2) || 1)}` : `x²=${Number(val3.slice(1))-Number(val2)}:${Number(['-', '-1'].includes(val1.slice(0, -2)) ? -1 : val1.slice(0, -2) || 1)}` + '<br>\n' + `x=±√${(Number(val3.slice(1))-Number(val2))/Number(['-', '-1'].includes(val1.slice(0, -2)) ? -1 : val1.slice(0, -2) || 1)}`}<br>
+                                ${(Number(val3.slice(1))-Number(val2))/Number(['-', '-1'].includes(val1.slice(0, -2)) ? -1 : val1.slice(0, -2) || 1) < 0 ? 'x=Ø' : `x=±${Math.sqrt((Number(val3.slice(1))-Number(val2))/Number(['-', '-1'].includes(val1.slice(0, -2)) ? -1 : val1.slice(0, -2) || 1))}`}
                             `: ''}`.split('.').join(','))
                         
                             document.getElementById('ecuaciones-2nd-grado-confirm').textContent = ''
