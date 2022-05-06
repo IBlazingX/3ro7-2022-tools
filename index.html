@@ -16,6 +16,20 @@
         }
     </style>
 
+    <script>
+        function numToExp(val) {
+            let list = []
+            for (let v of String(val).split('')) list.push({"0": '⁰', "1": '¹', "2": '²', "3": '³', "4": '⁴', "5": '⁵', "6": '⁶', "7": '⁷', "8": '⁸', "9": '⁹'}[v] || '')
+            return list.join('')
+        }
+
+        function expToNum(val) {
+            let list = []
+            for (let v of String(val).split('')) list.push({"⁰": '0', "¹": '1', "²": '2', "³": '3', "⁴": '4', "⁵": '5', "⁶": '6', "⁷": '7', "⁸": '8', "⁹": '9'}[v] || '')
+            return list.join('')
+        }
+    </script>
+
     <div class="card text-white bg-success mb-3">
         <div class="card-header" style="text-align: center;">
             Matemáticas
@@ -159,48 +173,241 @@
 
                     </script>
                 </div>
-                <!-- <div class="card text-white bg-dark mb-3" style="min-width: 99%; margin: 5px;">
+                <div class="card text-white bg-dark mb-3" style="min-width: 99%; margin: 5px;">
                     <div class="card-header" style="text-align: center;">
-                        Propiedad Hankeliana (in development)
+                        Propiedad Hankeliana
                     </div>
                     <div class="card-body">
                         <p class="card-text">
-                            Resuelve una operación con la <span style="color: yellow;">propiedad Hankeliana</span>, ej: <span style="color: green;">x²+5x=0</span><br><br>
-                            Es importante que se cumplan estas condiciones para que el problema sea valido en la <span style="color: yellow;">propiedad Hankeliana</span>:
-                            <li>El resultado de la operación tiene que ser igual a <span style="color: yellow;">0</span></li>
-                            <li>Ambos factores tienen que tener <span style="color: yellow;">parte literal</span></li>
-                            <li>Al menos un factor tiene que estar elavado a la <span style="color: yellow;">2 o más</span></li>
+                            Resuelve una operación con la <span style="color: green;">propiedad Hankeliana</span>, ej: <span style="color: green;">x²+5x=0</span><br>
+                            Para elevar la x escribe el numerito chico, ej; <span style="color: green;">x²⁶</span>, o el simbolo ^ y el numero normal, ej; <span style="color: green;">x^26</span>
                         </p>
+                        <li> Si cualquiera de los factores de la operación no tiene parte literal no es resolvible con la <span style="color: yellow;">propiedad Hankeliana</span> </li>
+                        <li> Si los grados de ambas partes literales son iguales estos factores se juntarian y no seria resolvible con la <span style="color: yellow;">propiedad Hankeliana</span> </li>
+                        <li> Si el grado de la parte literal del primer factor es menor al del segundo factor no puedo resolverlo, porfavor cambia su orden, ej: <span style="color: yellow;">x-2x²=0 -> -2x²+x=0</span>, <span style="color: yellow;">-x+x²=0 -> x²-x=0</span> </li>
+                        <li> Si la diferencia entre ambos grados de las partes literal de los factores es mayor a 2 no puedo resolverlo, ej: <span style="color: yellow;">x-2x⁴=0 -> Dif. 3</span>, <span style="color: yellow;">-x+x^7=0 -> Dif. 6</span> </li>
                         <hr>
-                        <p class="card-text">
-                            Operación: <span id="ecuaciones-2nd-grado-val1-text" style="color: #0f0;">x²</span><span id="ecuaciones-2nd-grado-val2-text" style="color: #0f0;">+x</span><span id="ecuaciones-2nd-grado-val3-text" style="color: #0f0;">=0</span><br>
-                            Solución: <br>
-                            <span class="text-muted" id="ecuaciones-2nd-grado-text">
-                                x²+x=0 <br>
-                                x.(x+1)=0 <br>
-                                Factores { x=0, x+1=0 -> x=0-1 } <br>
-                                S = { -1, 0 }
-                            </span><br>
-                            Verificación: <br>
-                            <span class="text-muted" id="ecuaciones-2nd-grado-text">
-                                x²+x=0 <br>
-                                0²+0=0 <br>
-                                x²+x=0 <br>
-                                (-1)²+-1=0
-                            </span>
+                        <div class="input-group mb-3">
+                            <input type="text" placeholder="x²+5x=0" value="" class="form-control" id="propiedad-hankeliana-input">
+                        </div>
+                        <p class="card-text text-muted" id="propiedad-hankeliana-result">
+                            x²+5x=0 <br>
+                            x.(x+5)=0 --> Factores: { x=0 | x+5=0 -> x=0-5 } <br>
+                            S={ 0 | -5 }
+                        </p>
+                        <p class="card-text text-muted" id="propiedad-hankeliana-confirm">
+                            <span style="color: white; text-decoration: underline;">Verificación</span><br>
+                            x²+5x=0 <br>
+                            0²+5.0=0 <br>
+                            x²+5x=0 <br>
+                            (-5)²+5.(-5)=0
                         </p>
                     </div>
-                    <div class="card-footer">
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control px-1" id="ecuaciones-2nd-grado-val1">
-                            <span class="input-group-text px-1">x²</span>
-                            <input type="text" class="form-control px-1" id="ecuaciones-2nd-grado-val2">
-                            <span class="input-group-text px-1">=</span>
-                            <input type="text" class="form-control px-1" id="ecuaciones-2nd-grado-val3">
-                            <button class="btn btn-warning" type="button" id="ecuaciones-2nd-grado" active>Resolver</button>
-                        </div>
-                    </div>
-                </div> -->
+        
+                    <script>
+                        document.getElementById('propiedad-hankeliana-input').addEventListener("input", function(){
+                            /** @type {String} */
+                            let input = this.value.trim()
+                            let values = []
+                            let temp = ''
+                            let count = 0
+
+                            for (let char of input.split('')) {
+                                count++
+
+                                if (values.length == 0) {
+                                    let can = true
+                                    let num = temp.slice(0, temp.indexOf('x') != -1 ? temp.indexOf('x') : 0)
+                                    let lit = temp.slice(temp.indexOf('x') != -1 ? temp.indexOf('x') : temp.length)
+                                    let grade = ''
+
+                                    if (!lit) can = false
+
+                                    if (num) {
+                                        if (num.split('').filter(v => '+-'.split('').includes(v)).length > 0 && !['+', '-'].includes(num.slice(0, 1))) can = false
+                                        if (num.startsWith('-,') || num.startsWith('+,') || num.startsWith(',') || num.endsWith(',')) can = false
+                                        if (num.split('').filter(v => !'0123456789,+-'.split('').includes(v)).length > 0) can = false
+                                        if (num.split('').filter(v => '+-'.split('').includes(v)).length > 1) can = false
+                                        if (num.split('').filter(v => v === ',').length > 1) can = false
+
+                                        if (num.startsWith('+')) num = num.slice(1)
+                                    }
+
+                                    if (lit) {
+                                        lit = lit.slice(1)
+
+                                        if (lit.startsWith('^')) {
+                                            lit = lit.slice(1)
+
+                                            if (lit.split('').filter(v => !'0123456789'.split('').includes(v)).length > 0) can = false
+                                            if (lit.length == 0) can = false
+
+                                            grade = lit
+                                            lit = `x${numToExp(lit)}`
+
+                                        } else {
+                                            if (lit.split('').filter(v => !'⁰¹²³⁴⁵⁶⁷⁸⁹'.split('').includes(v)).length > 0) can = false
+                                            grade = expToNum(lit)
+                                            lit = `x${lit}`
+                                        }
+                                    }
+
+                                    if (can && ['-', '+'].includes(char)) {
+                                        values.push({
+                                            num: num ? String(num).split(',').join('.') : null,
+                                            lit: lit ? String(lit) : null,
+                                            grade: grade ? String(grade).split(',').join('.') : null
+                                        })
+                                        temp = char
+
+                                    } else temp+= char
+
+                                } else if (values.length == 1) {
+                                    let can = true
+                                    let num = temp.slice(0, temp.indexOf('x') != -1 ? temp.indexOf('x') : 0)
+                                    let lit = temp.slice(temp.indexOf('x') != -1 ? temp.indexOf('x') : temp.length)
+                                    let grade = ''
+
+                                    if (!lit) can = false
+
+                                    if (num) {
+                                        if (num.split('').filter(v => '+-'.split('').includes(v)).length > 0 && !['+', '-'].includes(num.slice(0, 1))) can = false
+                                        if (num.startsWith('-,') || num.startsWith('+,') || num.startsWith(',') || num.endsWith(',')) can = false
+                                        if (num.split('').filter(v => !'0123456789,+-'.split('').includes(v)).length > 0) can = false
+                                        if (num.split('').filter(v => '+-'.split('').includes(v)).length > 1) can = false
+                                        if (num.split('').filter(v => v === ',').length > 1) can = false
+                                        if (!['+', '-'].includes(num.slice(0, 1))) can = false
+                                    }
+
+                                    if (lit) {
+                                        lit = lit.slice(1)
+
+                                        if (lit.startsWith('^')) {
+                                            lit = lit.slice(1)
+
+                                            if (lit.split('').filter(v => !'0123456789'.split('').includes(v)).length > 0) can = false
+                                            if (lit.length == 0) can = false
+
+                                            grade = lit
+                                            lit = `x${numToExp(lit)}`
+
+                                        } else {
+                                            if (lit.split('').filter(v => !'⁰¹²³⁴⁵⁶⁷⁸⁹'.split('').includes(v)).length > 0) can = false
+                                            grade = expToNum(lit)
+                                            lit = `x${lit}`
+                                        }
+                                    }
+
+                                    if (Number(grade || 1) >= Number(values[0].grade || 1)) can = false
+
+                                    if (can && char === '=') {
+                                        values.push({
+                                            num: num ? String(num).split(',').join('.') : null,
+                                            lit: lit ? String(lit) : null,
+                                            grade: grade ? String(grade).split(',').join('.') : null
+                                        })
+                                        temp = char
+
+                                    } else temp+= char
+
+                                } else if (values.length == 2) {
+                                    temp+= char
+
+                                    let can = true
+                                    let num = temp.startsWith('=') ? temp.slice(1) : null
+                                    let lit, grade
+
+                                    if (!num) can = false
+
+                                    if (num) {
+                                        if (num.split('').filter(v => '+-'.split('').includes(v)).length > 0 && !['+', '-'].includes(num.slice(0, 1))) can = false
+                                        if (num.startsWith('-,') || num.startsWith('+,') || num.startsWith(',') || num.endsWith(',')) can = false
+                                        if (num.split('').filter(v => !'0123456789,+-'.split('').includes(v)).length > 0) can = false
+                                        if (num.split('').filter(v => '+-'.split('').includes(v)).length > 1) can = false
+                                        if (num.split('').filter(v => v === ',').length > 1) can = false
+
+                                        if (num.startsWith('+')) num = num.slice(1)
+                                    }
+
+                                    if (can && count == input.length) {
+                                        values.push({
+                                            num: num ? String(num).split(',').join('.') : null,
+                                            lit: lit ? String(lit) : null,
+                                            grade: grade ? String(grade).split(',').join('.') : null
+                                        })
+                                        temp = ''
+                                    }
+                                }
+                            }
+
+                            if (values.length > 1 && Math.abs(Number(values[0].grade || 1) - Number(values[1].grade || 1)) > 2) {
+                                values = []
+                                temp = input
+                            }
+
+                            /** @type {String} */
+                            let val = `${(values[0] || {}).num || ''}${(values[0] || {}).lit || ''}` + `${(values[1] || {}).num || ''}${(values[1] || {}).lit || ''}` + `${(values[2] || {}).num ? '=' : ''}${(values[2] || {}).num || ''}${(values[2] || {}).lit || ''}`
+                            let insert = []
+                            let S = null
+
+                            if (values.length == 3) {
+                                let x1 = Number(values[1].grade || 1) || 0
+                                let x2 = Number(values[0].grade || 1) - x1 || 0
+
+                                let f1 = `x${x1 > 1 ? numToExp(x1) : ''}`
+                                let f2 = [
+                                    `${values[0].num || ''}x${x2 > 1 ? numToExp(x2) : ''}${values[1].num}`,
+                                ]
+
+                                f2.push(`${values[0].num || ''}x${x2 > 1 ? numToExp(x2) : ''}${values[1].num}=0`)
+                                f2.push(`x${x2 > 1 ? numToExp(x2) : ''}=${values[0].num ? '(' : ''}0${values[1].num.startsWith('-') ? '+' : ''}${Number(values[1].num) * -1}${values[0].num ? ')' : ''}${values[0].num ? `:${values[0].num}${values[0].num === '-' ? '1' : ''}` : ''}`)
+                                if (x2 > 1) f2.push((0 - Number(values[1].num)) / Number(values[0].num === '-' ? -1 : values[0].num || 1) >= 0 ? `x${x2 > 1 ? numToExp(x2) : ''}=±√${(0 - Number(values[1].num)) / Number(values[0].num === '-' ? -1 : values[0].num || 1)}` : 'x=Ø')
+                                f2.push(`${(0 - Number(values[1].num)) / Number(values[0].num === '-' ? -1 : values[0].num || 1)}`)
+
+                                insert.push(`${f1}#(${f2[0]})=${values[2].num} --> Factores: { ${f1}=0 | ${f2.slice(1, -1).join(' -> ')} }`)
+                            
+                                if (x2 > 1 && (0 - Number(values[1].num)) / Number(values[0].num === '-' ? -1 : values[0].num || 1) < 0) insert.push(`S=Ø`)
+                                else {
+                                    if (x2 > 1) insert.push(`S={ 0, -√${f2[f2.length - 1]}, +√${f2[f2.length - 1]} }`)
+                                    else insert.push(`S={ 0 | ${f2[f2.length - 1]} }`)
+
+                                    S = [x2 > 1, f2[f2.length - 1]]
+                                }
+                            }
+
+                            document.getElementById('propiedad-hankeliana-result').textContent = ''
+                            document.getElementById('propiedad-hankeliana-result').insertAdjacentHTML('afterbegin', `<span style="color: green;">${(val)}</span><span style="color: red;">${temp || ''}</span> ${values.length == 3 ? `<br>\n${insert.join('<br>\n')}` : ''}`.split('.').join(',').split('#').join('.'))
+
+                            document.getElementById('propiedad-hankeliana-confirm').textContent = ''
+                            document.getElementById('propiedad-hankeliana-confirm').insertAdjacentHTML('afterbegin', `<span style="color: white; text-decoration: underline;">Verificación</span>${values.length == 3 && S ? `<br>
+                                ${val}<br>
+                                ${values[0].num ? (values[0].num === '-' ? '-1' : values[0].num) + `#0${numToExp(values[0].grade)}` : `0${numToExp(values[0].grade)}`}${values[1].num ? (values[1].num === '-' ? '-1' : values[1].num) + `#0${numToExp(values[1].grade)}` : `0${numToExp(values[1].grade)}`}=${values[2].num}<br>
+                                ${val}<br>
+                                ${values[0].num ? (values[0].num === '-' ? '-1' : values[0].num) + `#${!S[0] ? (S[1] < 0 ? `(${S[1]})` : S[1]) : `(√${S[1]})`}${numToExp(values[0].grade)}` : `${!S[0] ? (S[1] < 0 ? `(${S[1]})` : S[1]) : `(√${S[1]})`}${numToExp(values[0].grade)}`}${values[1].num ? (values[1].num === '-' ? '-1' : values[1].num) + `#${!S[0] ? (S[1] < 0 ? `(${S[1]})` : S[1]) : `(√${S[1]})`}${numToExp(values[1].grade)}` : `${!S[0] ? (S[1] < 0 ? `(${S[1]})` : S[1]) : `(√${S[1]})`}${numToExp(values[1].grade)}`}=${values[2].num}
+                                ${S[0] ? `<br>\n${val}` : ''}
+                                ${S[0] ? `<br>\n${values[0].num ? (values[0].num === '-' ? '-1' : values[0].num) + `#${!S[0] ? (S[1] < 0 ? `(${S[1]})` : S[1]) : `(-√${S[1]})`}${numToExp(values[0].grade)}` : `${!S[0] ? (S[1] < 0 ? `(${S[1]})` : S[1]) : `(-√${S[1]})`}${numToExp(values[0].grade)}`}${values[1].num ? (values[1].num === '-' ? '-1' : values[1].num) + `#${!S[0] ? (S[1] < 0 ? `(${S[1]})` : S[1]) : `(-√${S[1]})`}${numToExp(values[1].grade)}` : `${!S[0] ? (S[1] < 0 ? `(${S[1]})` : S[1]) : `(-√${S[1]})`}${numToExp(values[1].grade)}`}=${values[2].num}` : ''}
+                            `: ''}`.split('.').join(',').split('#').join('.'))
+
+                            if (input.length < 1) {
+                                document.getElementById('propiedad-hankeliana-result').textContent = ''
+                                document.getElementById('propiedad-hankeliana-result').insertAdjacentHTML('afterbegin', `
+                                    x²+5x=0 <br>
+                                    x.(x+5)=0 --> Factores: { x=0 | x+5=0 -> x=0-5 } <br>
+                                    S={ 0 | -5 }
+                                `)
+
+                                document.getElementById('propiedad-hankeliana-confirm').textContent = ''
+                                document.getElementById('propiedad-hankeliana-confirm').insertAdjacentHTML('afterbegin', `
+                                    <span style="color: white; text-decoration: underline;">Verificación</span><br>
+                                    x²+5x=0 <br>
+                                    0²+5.0=0 <br>
+                                    x²+5x=0 <br>
+                                    (-5)²+5.(-5)=0
+                                `)
+                            }
+                        })
+                    </script>
+                </div>
             </div>
         </div>
     </div>
